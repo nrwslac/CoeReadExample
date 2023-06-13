@@ -12,6 +12,10 @@
     <Implicit_KindOfTask>{c03827a5-59e7-4de5-aa52-f3e8393b708d}</Implicit_KindOfTask>
     <Implicit_Jitter_Distribution>{8fd07e8b-6344-4e64-8fd6-f9f91b93f8da}</Implicit_Jitter_Distribution>
     <LibraryReferences>{4746502f-a599-433e-bc26-354ec315c514}</LibraryReferences>
+    <CombineIds>false</CombineIds>
+    <Title>CoeReadExample</Title>
+    <Released>true</Released>
+    <ProjectVersion>0.0.0</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DUTs\DUT_70x1CoeData.TcDUT">
