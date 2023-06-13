@@ -4,7 +4,7 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 {attribute 'pytmc' := '
-        pv: PLC:TEST:COE
+        pv: PLC:TEST
 '}
 fbReadCoe : FB_Read70x1CoeData;
 END_VAR
