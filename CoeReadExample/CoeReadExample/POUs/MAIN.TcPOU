@@ -3,6 +3,9 @@
   <POU Name="MAIN" Id="{5c316f37-c00a-4846-b3a7-5df370ce17b6}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+{attribute 'pytmc' := '
+        pv: PLC:TEST:COE
+'}
 fbReadCoe : FB_Read70x1CoeData;
 END_VAR
 ]]></Declaration>
