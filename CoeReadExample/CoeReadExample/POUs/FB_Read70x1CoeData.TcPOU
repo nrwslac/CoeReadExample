@@ -6,9 +6,6 @@ VAR_INPUT
    userNetId             : T_AmsNetId := ''; // Have to be entered
 END_VAR
 VAR_OUTPUT
-    {attribute 'pytmc' := '
-        pv:
-    '}
     aCoeData : ARRAY[0..9] OF DUT_70x1CoeData;
     userSlaveAddr         : POINTER TO UINT;
 END_VAR
