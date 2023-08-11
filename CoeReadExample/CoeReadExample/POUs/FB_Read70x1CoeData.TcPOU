@@ -36,8 +36,8 @@ VAR
    pDstBuf              :   POINTER TO WORD;
    cbBufLen   : UDINT;
 
-    bValidTerm : BOOL;
-    nForLoop : INT;
+   bValidTerm : BOOL;
+   nForLoop : INT;
 
 END_VAR]]></Declaration>
     <Implementation>
@@ -49,14 +49,15 @@ E_CoeState.Init:
    IF NOT fbGetSecondaries.bBusy THEN
         userSlaveAddr := ADR(fbGetSecondaries.userSlaveAddr);
         nSecondaries := fbGetSecondaries.nSecondaries;
-   END_IF
-   IF bStartRead AND NOT fbGetSecondaries.bBusy THEN
-        eState := E_CoeState.PreRead;
+        eState := E_CoeState.PreRead;// Next state for reading
    END_IF
 E_CoeState.PreRead:
+   IF bStartRead THEN
       eState := E_CoeState.Read;// Next state for reading
       fbCoeRead(bExecute := FALSE);// Prepare CoE-Access: Read an object/ sub index
       bStartRead := FALSE;
+   END_IF
+;
 
 E_CoeState.Read:
 
@@ -98,7 +99,7 @@ E_CoeState.Idle:
       eState := E_CoeState.Error;     // Error case
    ELSE
       IF NOT fbCoeRead.bBusy THEN
-             eState := E_CoeState.Init;
+             eState := E_CoeState.PreRead;
              IF nReadIndex = 0 THEN
                 // Make sure its an EL70x1
                 bValidTerm := FALSE;
@@ -116,8 +117,14 @@ E_CoeState.Idle:
                     // Invalid terminal, looks for next temrinal
                     nSecondaryIndex := nSecondaryIndex + 1;
                     nReadIndex := 0;
-                    estate := E_CoeState.Init;
+                    //estate := E_CoeState.Init;
+                    estate := E_CoeState.PreRead;
                     bStartRead := TRUE;
+                ELSE
+                    //Invalid terminal and none left.
+                    //Done reading, reset indices
+                    nReadIndex := 0;
+                    nSecondaryIndex := 0;
                 END_IF
 
              ELSIF nReadIndex < nNumCoeParam - 1 THEN
@@ -128,6 +135,9 @@ E_CoeState.Idle:
                 nSecondaryIndex := nSecondaryIndex + 1;
                 bStartRead := TRUE;
              ELSE
+                //Done reading, reset indices
+                nReadIndex := 0;
+                nSecondaryIndex := 0;
                 ;
              END_IF
          END_IF
@@ -142,7 +152,7 @@ E_CoeState.Error:
         IF nSecondaryIndex < nSecondaries - 1 THEN
             nSecondaryIndex := nSecondaryIndex + 1;
             nReadIndex := 0;
-            estate := E_CoeState.Init;
+            estate := E_CoeState.PreRead;
             bStartRead := TRUE;
         END_IF
     END_IF
